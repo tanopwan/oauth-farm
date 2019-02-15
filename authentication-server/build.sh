@@ -1,0 +1,1 @@
+docker build -t oauth-farm/authentication-server:latest .
