@@ -12,9 +12,13 @@ func NewService() *Service {
 		ID:       1,
 		Username: "tanopwan@gmail.com",
 	}
+	user2 := Model{
+		ID:       2,
+		Username: "undermatthew@gmail.com",
+	}
 	return &Service{
-		usersByIDs:      map[int]*Model{1: &user},
-		usersByUsername: map[string]*Model{"tanopwan@gmail.com": &user},
+		usersByIDs:      map[int]*Model{1: &user, 2: &user2},
+		usersByUsername: map[string]*Model{"tanopwan@gmail.com": &user, "undermatthew@gmail.com": &user2},
 	}
 }
 
