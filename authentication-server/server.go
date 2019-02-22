@@ -3,23 +3,29 @@ package main
 import (
 	"context"
 	"github.com/labstack/echo"
-	// "github.com/labstack/echo/middleware"
+	appdb "github.com/tanopwan/oauth-farm/authentication-server/db"
 	"github.com/tanopwan/oauth-farm/authentication-server/server"
-
 	"html/template"
 )
 
 // Server server
 type Server struct {
-	e *echo.Echo
-	a *server.App
+	e     *echo.Echo
+	a     *server.App
+	close func()
 }
 
 // New server
 func New() *Server {
+	db, close, err := appdb.DialPostgresDB()
+	if err != nil {
+		panic(err)
+	}
+	defer close()
+
 	return &Server{
 		e: echo.New(),
-		a: server.New(),
+		a: server.New(db),
 	}
 }
 

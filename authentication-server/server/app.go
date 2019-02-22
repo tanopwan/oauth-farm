@@ -1,12 +1,14 @@
 package server
 
 import (
+	"database/sql"
 	"fmt"
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
 	"github.com/tanopwan/oauth-farm/authentication-server/oauth"
 	"github.com/tanopwan/oauth-farm/authentication-server/openid"
 	session "github.com/tanopwan/oauth-farm/authentication-server/session/service"
+	"github.com/tanopwan/oauth-farm/authentication-server/user/repository/postgres"
 	user "github.com/tanopwan/oauth-farm/authentication-server/user/service"
 	"io/ioutil"
 	"net/http"
@@ -21,9 +23,9 @@ type App struct {
 }
 
 // New App
-func New() *App {
+func New(db *sql.DB) *App {
 	return &App{
-		userService:    user.NewService(),
+		userService:    user.NewService(postgres.NewRepository(db)),
 		sessionService: session.NewService(),
 	}
 }
@@ -57,7 +59,7 @@ func (a *App) GoogleLoginCode() echo.HandlerFunc {
 		}
 		fmt.Printf("result: %+v\n", userInfo)
 
-		user, err := a.userService.GetActiveUser(userInfo.Email)
+		user, err := a.userService.GetActiveUserByEmail(userInfo.Email)
 		if err != nil {
 			return errors.Wrap(err, "ctrlr googlelogin: user is not found or not active")
 		}
@@ -107,7 +109,7 @@ func (a *App) GoogleLoginToken() echo.HandlerFunc {
 		}
 		fmt.Printf("result: %+v\n", userInfo)
 
-		user, err := a.userService.GetActiveUser(userInfo.Email)
+		user, err := a.userService.GetActiveUserByEmail(userInfo.Email)
 		if err != nil {
 			return errors.Wrap(err, "ctrlr googlelogin: user is not found or not active")
 		}
@@ -166,7 +168,7 @@ func (a *App) GoogleLoginOpenID() echo.HandlerFunc {
 			return returnError(http.StatusUnauthorized, n, errors.New("claims' email is invalid"))
 		}
 
-		user, err := a.userService.GetActiveUser(email)
+		user, err := a.userService.GetActiveUserByEmail(email)
 		if err != nil {
 			return returnError(http.StatusUnauthorized, n, errors.Wrap(err, "user is not found or not active"))
 		}

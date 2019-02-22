@@ -2,7 +2,6 @@ package feature_test
 
 import (
 	"github.com/labstack/echo"
-	"github.com/tanopwan/oauth-farm/authentication-server/server"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -10,8 +9,6 @@ import (
 )
 
 func TestGoogleLoginWithOpenIDSuccess(t *testing.T) {
-	app := server.New()
-
 	payload := ""
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodPost, "/openid/login/google", strings.NewReader(payload))

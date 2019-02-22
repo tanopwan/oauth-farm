@@ -2,10 +2,13 @@ package main
 
 import (
 	"context"
+
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	_ "github.com/lib/pq"
 )
 
 func main() {
