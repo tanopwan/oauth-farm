@@ -17,15 +17,15 @@ type Server struct {
 
 // New server
 func New() *Server {
-	db, close, err := appdb.DialPostgresDB()
+	db, c, err := appdb.DialPostgresDB()
 	if err != nil {
 		panic(err)
 	}
-	defer close()
 
 	return &Server{
-		e: echo.New(),
-		a: server.New(db),
+		e:     echo.New(),
+		a:     server.New(db),
+		close: c,
 	}
 }
 
@@ -35,6 +35,7 @@ func (s *Server) start() {
 }
 
 func (s *Server) shutdown(ctx context.Context) error {
+	s.close()
 	return s.e.Shutdown(ctx)
 }
 

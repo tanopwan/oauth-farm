@@ -26,7 +26,7 @@ func DialPostgresDB() (*sql.DB, func(), error) {
 
 	password := os.Getenv("PG_PASSWORD")
 
-	fmt.Println("[DialPostgresDB] connecting to postgresql ", host)
+	fmt.Println("[DialPostgresDB] connecting to postgresql", host)
 
 	connStr := fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable", user, password, host, database)
 	db, err := sql.Open("postgres", connStr)
@@ -40,7 +40,7 @@ func DialPostgresDB() (*sql.DB, func(), error) {
 	}
 
 	cleanup := func() {
-		fmt.Print("[DialPostgresDB] Closing connection")
+		fmt.Println("[DialPostgresDB] Closing connection")
 		if err := db.Close(); err != nil {
 			log.Fatalf("error closing db connection with reason: %s\n", err.Error())
 		}
