@@ -14,7 +14,7 @@ import (
 func main() {
 	a := New()
 	a.registerRoutes()
-	a.start()
+	go a.start()
 
 	stop := make(chan os.Signal, 1)
 
