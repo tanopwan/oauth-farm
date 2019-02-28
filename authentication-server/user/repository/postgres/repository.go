@@ -23,14 +23,17 @@ func NewRepository(db *sql.DB) *Repository {
 // GetByID get user by ID
 func (r *Repository) GetByID(id int) (*repository.Model, error) {
 	q := `select * from app_user where id = :id`
-	e := user{}
+	e := user{
+		ID: id,
+	}
 	stmt, err := r.dbx.PrepareNamed(q)
 	if err != nil {
 		log.Printf("[GetByID] failed to prepare named with reason: %s\n", err.Error())
 		return nil, err
 	}
 
-	err = stmt.Get(&e, id)
+	result := user{}
+	err = stmt.Get(&result, &e)
 	if err != nil {
 		log.Printf("[GetByID] failed to get with reason: %s\n", err.Error())
 		return nil, err
