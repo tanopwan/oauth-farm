@@ -31,6 +31,11 @@ func New() *Server {
 
 func (s *Server) start() {
 	s.e.Logger.Info("starting server ...")
+	s.e.Start(":3000")
+}
+
+func (s *Server) startTLS() {
+	s.e.Logger.Info("starting server ...")
 	s.e.StartTLS(":3000", "cert.pem", "key.pem")
 }
 

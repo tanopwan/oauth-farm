@@ -12,6 +12,6 @@
 *.out
 
 # Others
-*/run.sh
+*/run*.sh
 */start.sh
 .idea/*
