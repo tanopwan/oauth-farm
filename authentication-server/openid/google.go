@@ -16,8 +16,13 @@ var cc = newMemoryCache()
 const timeout = time.Duration(10 * time.Second)
 
 func getJWTKeys(token *jwt.Token) (interface{}, error) {
+	keyID, ok := token.Header["kid"].(string)
+	if !ok {
+		return nil, errors.New("expecting JWT header to have string kid")
+	}
+
 	if cc != nil {
-		value := cc.get("google_public")
+		value := cc.get(keyID)
 		if value != nil {
 			fmt.Printf("cache found google_public\n")
 			return value, nil
@@ -79,17 +84,12 @@ func getJWTKeys(token *jwt.Token) (interface{}, error) {
 		return nil, err
 	}
 
-	keyID, ok := token.Header["kid"].(string)
-	if !ok {
-		return nil, errors.New("expecting JWT header to have string kid")
-	}
-
 	if key := set.LookupKeyID(keyID); len(key) == 1 {
 		m, err := key[0].Materialize()
 		if err != nil {
 			return nil, err
 		}
-		cc.setExpire("google_public", m, time.Hour*24)
+		cc.setExpire(keyID, m, time.Hour*24)
 		return m, nil
 	}
 
@@ -104,9 +104,5 @@ func TokenInfoForProd(IDToken string) (*jwt.MapClaims, error) {
 	}
 
 	claims := token.Claims.(jwt.MapClaims)
-	// for key, value := range claims {
-	// 	fmt.Printf("%s\t%v\n", key, value)
-	// }
-
 	return &claims, nil
 }

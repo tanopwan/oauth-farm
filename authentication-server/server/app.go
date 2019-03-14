@@ -7,9 +7,9 @@ import (
 	"github.com/pkg/errors"
 	"github.com/tanopwan/oauth-farm/authentication-server/oauth"
 	"github.com/tanopwan/oauth-farm/authentication-server/openid"
-	session "github.com/tanopwan/oauth-farm/authentication-server/session/service"
 	"github.com/tanopwan/oauth-farm/authentication-server/user/repository/postgres"
 	user "github.com/tanopwan/oauth-farm/authentication-server/user/service"
+	"github.com/tanopwan/oauth-farm/common/session"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -318,6 +318,26 @@ func (a *App) Logout() echo.HandlerFunc {
 		}
 
 		http.SetCookie(c.Response().Writer, &cookie)
+		return c.Redirect(http.StatusFound, "/")
+	}
+}
+
+// ResolveSession from cookie to user
+func (a *App) ResolveSession() echo.HandlerFunc {
+	n := "resolvesession"
+	return func(c echo.Context) error {
+		cookie, err := c.Request().Cookie(cCookieName)
+		if err != nil {
+			return returnError(http.StatusUnauthorized, n, errors.Wrap(err, "get cookie error"))
+		}
+
+		session := cookie.Value
+		sess, err := a.sessionService.ValidateSession(session)
+		if err != nil {
+			return returnError(http.StatusUnauthorized, n, errors.Wrap(err, "validate session error"))
+		}
+
+		c.Response().Header().Set("X-User-Id", fmt.Sprintf("%d", sess.UserID))
 		return c.Redirect(http.StatusFound, "/")
 	}
 }
