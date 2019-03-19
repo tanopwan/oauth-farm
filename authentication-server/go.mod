@@ -12,7 +12,7 @@ require (
 	github.com/mattn/go-isatty v0.0.7 // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/stretchr/testify v1.3.0 // indirect
-	github.com/tanopwan/oauth-farm/common v0.0.0-20190313095801-3da80f01f992
+	github.com/tanopwan/oauth-farm/common v0.0.0-20190319071108-9348b3939b20
 	github.com/valyala/fasttemplate v1.0.0 // indirect
 	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a // indirect
 	google.golang.org/appengine v1.4.0 // indirect

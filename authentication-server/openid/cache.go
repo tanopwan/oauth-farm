@@ -1,5 +1,10 @@
 package openid
 
+import (
+	"fmt"
+	"time"
+)
+
 type memoryCache struct {
 	data map[string]interface{}
 }

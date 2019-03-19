@@ -9,6 +9,7 @@ import (
 	"github.com/tanopwan/oauth-farm/authentication-server/openid"
 	"github.com/tanopwan/oauth-farm/authentication-server/user/repository/postgres"
 	user "github.com/tanopwan/oauth-farm/authentication-server/user/service"
+	"github.com/tanopwan/oauth-farm/common"
 	"github.com/tanopwan/oauth-farm/common/session"
 	"io/ioutil"
 	"net/http"
@@ -26,7 +27,7 @@ type App struct {
 func New(db *sql.DB) *App {
 	return &App{
 		userService:    user.NewService(postgres.NewRepository(db)),
-		sessionService: session.NewService(),
+		sessionService: session.NewService(common.NewRedisCache()),
 	}
 }
 

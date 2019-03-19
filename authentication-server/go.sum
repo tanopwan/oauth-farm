@@ -1,5 +1,6 @@
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
+github.com/garyburd/redigo v1.6.0/go.mod h1:NR3MbYisc3/PwhQ00EMzDiPmrwpPxAn5GI05/YaO1SY=
 github.com/go-sql-driver/mysql v1.4.0/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG5ZlKdlhCg5w=
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/jmoiron/sqlx v1.2.0/go.mod h1:1FEQNm3xlJgrMD+FBdI9+xvCksHtbpVBBw5dYhBSsks=
@@ -23,6 +24,8 @@ github.com/tanopwan/oauth-farm/common v0.0.0-20190313095801-3da80f01f992 h1:9tyk
 github.com/tanopwan/oauth-farm/common v0.0.0-20190313095801-3da80f01f992/go.mod h1:+/f/IJvrz8+vTtZUZa8Ya0hb+or0BksCDmd8NoBcEgw=
 github.com/tanopwan/oauth-farm/common v0.0.0-20190314041613-502db5ff8699 h1:yHTIH/ZTGxFcJF+lcQjgxnUla1d0b6ZeBOQ6mQrXgWQ=
 github.com/tanopwan/oauth-farm/common v0.0.0-20190314043704-50c08c672e96 h1:MduF3HBxHY64j+8ow5elv8LGK6j3hmzOBqacsJMES/U=
+github.com/tanopwan/oauth-farm/common v0.0.0-20190319071108-9348b3939b20 h1:2G2h5Hes2/4fMOr4MSjT8ep6ouvuiF5sc+mr76Egfp8=
+github.com/tanopwan/oauth-farm/common v0.0.0-20190319071108-9348b3939b20/go.mod h1:92B35kWlQaDJCA15b4wSkDhZLc1Q0zoRcQ+wmCoj8lc=
 github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=
 github.com/valyala/fasttemplate v1.0.0 h1:MCROMI9ZxNYyLvdmeQErZcgsUjsxARzi1SnHWYo3TnM=
 github.com/valyala/fasttemplate v1.0.0/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=

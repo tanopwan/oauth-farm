@@ -5,7 +5,6 @@ import (
 	"fmt"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/lestrrat/go-jwx/jwk"
-	"github.com/tanopwan/oauth-farm/common"
 
 	"github.com/pkg/errors"
 	"net/http"
@@ -13,7 +12,7 @@ import (
 	"time"
 )
 
-var cc = common.NewMemoryCache()
+var cc = newMemoryCache()
 
 const timeout = time.Duration(10 * time.Second)
 
@@ -24,7 +23,7 @@ func getJWTKeys(token *jwt.Token) (interface{}, error) {
 	}
 
 	if cc != nil {
-		value := cc.get(keyID)
+		value := cc.Get(keyID)
 		if value != nil {
 			fmt.Printf("cache found google_public\n")
 			return value, nil
@@ -91,7 +90,7 @@ func getJWTKeys(token *jwt.Token) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		cc.setExpire(keyID, m, time.Hour*24)
+		cc.SetExpire(keyID, m, time.Hour*24)
 		return m, nil
 	}
 
