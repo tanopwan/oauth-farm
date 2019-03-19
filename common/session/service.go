@@ -5,18 +5,20 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"github.com/pkg/errors"
+	"github.com/tanopwan/oauth-farm/common"
 	"io"
 )
 
 // Service contains business logic to the domain
 type Service struct {
-	sessions map[string]int
+	// sessions  map[string]int
+	DataStore common.Cache
 }
 
 // NewService return new object
-func NewService() *Service {
+func NewService(cache common.Cache) *Service {
 	return &Service{
-		sessions: make(map[string]int),
+		DataStore: cache,
 	}
 }
 
@@ -35,7 +37,7 @@ func (s *Service) CreateSession(userID int) (*Model, error) {
 	}
 
 	hash := hex.EncodeToString(h.Sum(nil))
-	s.sessions[hash] = userID
+	s.DataStore.Set(hash, userID)
 	return &Model{
 		UserID: userID,
 		Hash:   hash,
@@ -44,13 +46,17 @@ func (s *Service) CreateSession(userID int) (*Model, error) {
 
 // ValidateSession function
 func (s *Service) ValidateSession(hash string) (*Model, error) {
+	userID, err := s.DataStore.Get(hash)
+	if err != nil {
+		return nil, errors.Wrap(err, "validatesession: get err")
+	}
 	return &Model{
-		UserID: s.sessions[hash],
+		UserID: userID.(int),
 		Hash:   hash,
 	}, nil
 }
 
 // RemoveSession function
 func (s *Service) RemoveSession(hash string) {
-	delete(s.sessions, hash)
+	s.DataStore.Del(hash)
 }
