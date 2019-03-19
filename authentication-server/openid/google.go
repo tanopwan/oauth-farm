@@ -5,13 +5,15 @@ import (
 	"fmt"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/lestrrat/go-jwx/jwk"
+	"github.com/tanopwan/oauth-farm/common"
+
 	"github.com/pkg/errors"
 	"net/http"
 	"net/url"
 	"time"
 )
 
-var cc = newMemoryCache()
+var cc = common.NewMemoryCache()
 
 const timeout = time.Duration(10 * time.Second)
 

@@ -17,8 +17,12 @@ github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINE
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
+github.com/tanopwan/oauth-farm v0.0.0-20190314041613-502db5ff8699 h1:vbhe4Klwg9vNMtO1YqRkcvFpvajBLO2JQ3qxbhXyTa0=
+github.com/tanopwan/oauth-farm v0.0.0-20190314043704-50c08c672e96 h1:bQBoMu3P8cxu8W0cAaMbROJuP6sUTmMMP0Q+XwLOwDE=
 github.com/tanopwan/oauth-farm/common v0.0.0-20190313095801-3da80f01f992 h1:9tyk1NGR4p7d065vZPk/aJ5rD/EFUASYIo3B4mal/SE=
 github.com/tanopwan/oauth-farm/common v0.0.0-20190313095801-3da80f01f992/go.mod h1:+/f/IJvrz8+vTtZUZa8Ya0hb+or0BksCDmd8NoBcEgw=
+github.com/tanopwan/oauth-farm/common v0.0.0-20190314041613-502db5ff8699 h1:yHTIH/ZTGxFcJF+lcQjgxnUla1d0b6ZeBOQ6mQrXgWQ=
+github.com/tanopwan/oauth-farm/common v0.0.0-20190314043704-50c08c672e96 h1:MduF3HBxHY64j+8ow5elv8LGK6j3hmzOBqacsJMES/U=
 github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=
 github.com/valyala/fasttemplate v1.0.0 h1:MCROMI9ZxNYyLvdmeQErZcgsUjsxARzi1SnHWYo3TnM=
 github.com/valyala/fasttemplate v1.0.0/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
