@@ -23,7 +23,7 @@ func NewService(cache common.Cache) *Service {
 }
 
 // CreateSession function
-func (s *Service) CreateSession(userID int) (*Model, error) {
+func (s *Service) CreateSession(userID string) (*Model, error) {
 	b := make([]byte, 64)
 	_, err := io.ReadFull(crand.Reader, b)
 	if err != nil {
@@ -39,8 +39,8 @@ func (s *Service) CreateSession(userID int) (*Model, error) {
 	hash := hex.EncodeToString(h.Sum(nil))
 	s.DataStore.Set(hash, userID)
 	return &Model{
-		UserID: userID,
-		Hash:   hash,
+		Value: userID,
+		Hash:  hash,
 	}, nil
 }
 
@@ -50,9 +50,13 @@ func (s *Service) ValidateSession(hash string) (*Model, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "validatesession: get err")
 	}
+	value, ok := userID.(string)
+	if !ok {
+		return nil, errors.Wrap(err, "validatesession: nil session")
+	}
 	return &Model{
-		UserID: userID.(int),
-		Hash:   hash,
+		Value: value,
+		Hash:  hash,
 	}, nil
 }
 

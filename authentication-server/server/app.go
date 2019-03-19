@@ -14,6 +14,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -65,7 +66,7 @@ func (a *App) GoogleLoginCode() echo.HandlerFunc {
 			return errors.Wrap(err, "ctrlr googlelogin: user is not found or not active")
 		}
 
-		sess, err := a.sessionService.CreateSession(user.ID)
+		sess, err := a.sessionService.CreateSession(fmt.Sprintf("%d", user.ID))
 		if err != nil {
 			return errors.Wrap(err, "ctrlr googlelogin: create session error")
 		}
@@ -115,7 +116,7 @@ func (a *App) GoogleLoginToken() echo.HandlerFunc {
 			return errors.Wrap(err, "ctrlr googlelogin: user is not found or not active")
 		}
 
-		sess, err := a.sessionService.CreateSession(user.ID)
+		sess, err := a.sessionService.CreateSession(fmt.Sprintf("%d", user.ID))
 		if err != nil {
 			return errors.Wrap(err, "ctrlr googlelogin: create session error")
 		}
@@ -174,7 +175,7 @@ func (a *App) GoogleLoginOpenID() echo.HandlerFunc {
 			return returnError(http.StatusUnauthorized, n, errors.Wrap(err, "user is not found or not active"))
 		}
 
-		sess, err := a.sessionService.CreateSession(user.ID)
+		sess, err := a.sessionService.CreateSession(fmt.Sprintf("%d", user.ID))
 		if err != nil {
 			return returnError(http.StatusInternalServerError, n, errors.Wrap(err, "create session error"))
 		}
@@ -195,7 +196,7 @@ func (a *App) GoogleLoginOpenID() echo.HandlerFunc {
 }
 
 func (a *App) createEmptySession(c echo.Context) (*session.Model, error) {
-	sess, err := a.sessionService.CreateSession(0)
+	sess, err := a.sessionService.CreateSession("")
 	if err != nil {
 		return nil, errors.Wrap(err, "create session error")
 	}
@@ -229,7 +230,13 @@ func (a *App) extractUserFromCookie(c echo.Context) (*session.Model, *user.Model
 	// Validate valid session from cookie
 	session, err := a.sessionService.ValidateSession(cookie.Value)
 	if err != nil {
-		return nil, nil, errors.Wrap(err, "validate session error")
+		// Failed to validate session
+		sess, err := a.createEmptySession(c)
+		if err != nil {
+			return nil, nil, errors.Wrap(err, "create session error")
+		}
+
+		return sess, nil, nil
 	}
 
 	if session == nil {
@@ -242,13 +249,18 @@ func (a *App) extractUserFromCookie(c echo.Context) (*session.Model, *user.Model
 		return sess, nil, nil
 	}
 
-	if session.UserID == 0 {
+	if session.Value == "" {
 		c.Logger().Debugf("found empty session")
 		return session, nil, nil
 	}
 
-	c.Logger().Debugf("found session with user %d", session.UserID)
-	user, err := a.userService.GetUserByID(session.UserID)
+	c.Logger().Debugf("found session with user %s", session.Value)
+	userID, err := strconv.ParseInt(session.Value, 10, 64)
+	if err != nil {
+		c.Logger().Errorf("parse user id error: %s", err.Error())
+		return session, nil, nil
+	}
+	user, err := a.userService.GetUserByID(int(userID))
 	if err != nil {
 		c.Logger().Errorf("get user error: %s", err.Error())
 	} else if user == nil || user.ID == 0 {
@@ -303,7 +315,7 @@ func (a *App) Logout() echo.HandlerFunc {
 			}
 		}
 
-		sess, err := a.sessionService.CreateSession(0)
+		sess, err := a.sessionService.CreateSession("")
 		if err != nil {
 			return returnError(http.StatusInternalServerError, n, errors.Wrap(err, "create session error"))
 		}
@@ -338,7 +350,7 @@ func (a *App) ResolveSession() echo.HandlerFunc {
 			return returnError(http.StatusUnauthorized, n, errors.Wrap(err, "validate session error"))
 		}
 
-		c.Response().Header().Set("X-User-Id", fmt.Sprintf("%d", sess.UserID))
+		c.Response().Header().Set("X-User-Id", sess.Value)
 		return c.Redirect(http.StatusFound, "/")
 	}
 }

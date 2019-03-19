@@ -17,3 +17,5 @@ require (
 	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a // indirect
 	google.golang.org/appengine v1.4.0 // indirect
 )
+
+replace github.com/tanopwan/oauth-farm/common => ../common
