@@ -1,0 +1,4 @@
+github.com/garyburd/redigo v1.6.0/go.mod h1:NR3MbYisc3/PwhQ00EMzDiPmrwpPxAn5GI05/YaO1SY=
+github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
+github.com/tanopwan/oauth-farm/common v0.0.0-20190314041613-502db5ff8699 h1:yHTIH/ZTGxFcJF+lcQjgxnUla1d0b6ZeBOQ6mQrXgWQ=
+github.com/tanopwan/oauth-farm/common v0.0.0-20190314041613-502db5ff8699/go.mod h1:+/f/IJvrz8+vTtZUZa8Ya0hb+or0BksCDmd8NoBcEgw=
