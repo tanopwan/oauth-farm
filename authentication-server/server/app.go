@@ -228,7 +228,7 @@ func (a *App) extractUserFromCookie(c echo.Context) (*session.Model, *user.Model
 	}
 
 	// Validate valid session from cookie
-	session, err := a.sessionService.ValidateSession(cookie.Value)
+	userID, err := a.sessionService.ValidateSession(cookie.Value)
 	if err != nil {
 		// Failed to validate session
 		sess, err := a.createEmptySession(c)
@@ -239,7 +239,7 @@ func (a *App) extractUserFromCookie(c echo.Context) (*session.Model, *user.Model
 		return sess, nil, nil
 	}
 
-	if session == nil {
+	if userID == "" {
 		// First time entering web-site or session is already expired
 		sess, err := a.createEmptySession(c)
 		if err != nil {
@@ -249,26 +249,38 @@ func (a *App) extractUserFromCookie(c echo.Context) (*session.Model, *user.Model
 		return sess, nil, nil
 	}
 
-	if session.Value == "" {
+	if userID == "empty" {
 		c.Logger().Debugf("found empty session")
-		return session, nil, nil
+		return &session.Model{
+			Hash:  cookie.Value,
+			Value: userID,
+		}, nil, nil
 	}
 
-	c.Logger().Debugf("found session with user %s", session.Value)
-	userID, err := strconv.ParseInt(session.Value, 10, 64)
+	c.Logger().Debugf("found session with user %s", userID)
+	userIDInt, err := strconv.ParseInt(userID, 10, 64)
 	if err != nil {
 		c.Logger().Errorf("parse user id error: %s", err.Error())
-		return session, nil, nil
+		return &session.Model{
+			Hash:  cookie.Value,
+			Value: userID,
+		}, nil, nil
 	}
-	user, err := a.userService.GetUserByID(int(userID))
+	user, err := a.userService.GetUserByID(int(userIDInt))
 	if err != nil {
 		c.Logger().Errorf("get user error: %s", err.Error())
 	} else if user == nil || user.ID == 0 {
 		c.Logger().Debugf("user is not found")
 	} else {
-		return session, user, nil
+		return &session.Model{
+			Hash:  cookie.Value,
+			Value: userID,
+		}, user, nil
 	}
-	return session, nil, nil
+	return &session.Model{
+		Hash:  cookie.Value,
+		Value: userID,
+	}, nil, nil
 }
 
 // RenderHTML render MPA
@@ -345,12 +357,12 @@ func (a *App) ResolveSession() echo.HandlerFunc {
 		}
 
 		session := cookie.Value
-		sess, err := a.sessionService.ValidateSession(session)
+		userID, err := a.sessionService.ValidateSession(session)
 		if err != nil {
 			return returnError(http.StatusUnauthorized, n, errors.Wrap(err, "validate session error"))
 		}
 
-		c.Response().Header().Set("X-User-Id", sess.Value)
+		c.Response().Header().Set("X-User-Id", userID)
 		return c.Redirect(http.StatusFound, "/")
 	}
 }

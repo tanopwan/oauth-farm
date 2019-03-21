@@ -45,19 +45,16 @@ func (s *Service) CreateSession(userID string) (*Model, error) {
 }
 
 // ValidateSession function
-func (s *Service) ValidateSession(hash string) (*Model, error) {
+func (s *Service) ValidateSession(hash string) (string, error) {
 	userID, err := s.DataStore.Get(hash)
 	if err != nil {
-		return nil, errors.Wrap(err, "validatesession: get err")
+		return "empty", errors.Wrap(err, "validatesession: get err")
 	}
 	value, ok := userID.(string)
 	if !ok {
-		return nil, errors.Wrap(err, "validatesession: nil session")
+		return "empty", errors.Wrap(err, "validatesession: nil session")
 	}
-	return &Model{
-		Value: value,
-		Hash:  hash,
-	}, nil
+	return value, nil
 }
 
 // RemoveSession function
